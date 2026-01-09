@@ -19,7 +19,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { generatePixCode } from "../utils/pixGenerator";
 
 export default function QRCodeScreen({ route, navigation }: any) {
-  const { amount, isDonation, donationKey, donationName, donationCity } = route.params || {};
+  const { amount, isDonation, donationKey, donationName, donationCity } =
+    route.params || {};
   const [pixCode, setPixCode] = useState("");
   const [merchantName, setMerchantName] = useState("");
   const [copied, setCopied] = useState(false);
@@ -31,7 +32,7 @@ export default function QRCodeScreen({ route, navigation }: any) {
   const generatePix = async () => {
     try {
       let pixKey, name, city;
-      
+
       if (isDonation) {
         // Usar dados de doação
         pixKey = donationKey;
@@ -137,7 +138,11 @@ export default function QRCodeScreen({ route, navigation }: any) {
             <Text size="sm" color="$gray500" mb="$2">
               {isDonation ? "Valor da doação" : "Valor a receber"}
             </Text>
-            <Text size="5xl" bold color={isDonation ? "$amber600" : "$green600"}>
+            <Text
+              size="5xl"
+              bold
+              color={isDonation ? "$amber600" : "$green600"}
+            >
               {formatAmount(amount)}
             </Text>
             {isDonation && (

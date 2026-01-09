@@ -12,7 +12,7 @@ import {
 import { Delete, QrCode, Settings, Key } from "lucide-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const { height } = Dimensions.get('window');
+const { height } = Dimensions.get("window");
 
 export default function HomeScreen({ navigation }: any) {
   const [amount, setAmount] = useState("0");
@@ -120,7 +120,11 @@ export default function HomeScreen({ navigation }: any) {
   return (
     <Box flex={1} bg="$blue50">
       {/* Header */}
-      <Box px="$4" pt={isSmallScreen ? "$8" : "$12"} pb={isSmallScreen ? "$3" : "$6"}>
+      <Box
+        px="$4"
+        pt={isSmallScreen ? "$8" : "$12"}
+        pb={isSmallScreen ? "$3" : "$6"}
+      >
         <HStack justifyContent="space-between" alignItems="center">
           <VStack flex={1}>
             <Text size={isSmallScreen ? "2xl" : "3xl"} bold color="$gray800">
@@ -176,7 +180,12 @@ export default function HomeScreen({ navigation }: any) {
       </Box>
 
       {/* Custom Keypad */}
-      <Box flex={1} px="$4" pb={isSmallScreen ? "$4" : "$6"} justifyContent="flex-end">
+      <Box
+        flex={1}
+        px="$4"
+        pb={isSmallScreen ? "$4" : "$6"}
+        justifyContent="flex-end"
+      >
         <VStack space={isSmallScreen ? "xs" : "sm"}>
           {/* Row 1 */}
           <HStack space={isSmallScreen ? "xs" : "sm"}>
@@ -201,10 +210,7 @@ export default function HomeScreen({ navigation }: any) {
 
           {/* Row 4 */}
           <HStack space={isSmallScreen ? "xs" : "sm"}>
-            <KeypadButton
-              value="00"
-              onPress={() => handleNumberPress("00")}
-            />
+            <KeypadButton value="00" onPress={() => handleNumberPress("00")} />
             <KeypadButton value="0" onPress={() => handleNumberPress("0")} />
             <Pressable
               onPress={handleDelete}

@@ -10,11 +10,18 @@ import {
   ButtonIcon,
   Card,
 } from "@gluestack-ui/themed";
-import { ArrowLeft, Plus, Check, Edit, Trash2, Coffee } from "lucide-react-native";
+import {
+  ArrowLeft,
+  Plus,
+  Check,
+  Edit,
+  Trash2,
+  Coffee,
+} from "lucide-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { isValidPixKey } from "../utils/pixGenerator";
 
-const { height } = Dimensions.get('window');
+const { height } = Dimensions.get("window");
 
 interface PixKey {
   id: string;
@@ -60,10 +67,10 @@ export default function PixKeysScreen({ navigation }: any) {
         ...key,
         isActive: key.id === keyId,
       }));
-      
+
       setPixKeys(updatedKeys);
       await AsyncStorage.setItem("pixKeys", JSON.stringify(updatedKeys));
-      
+
       // Atualizar valores no formato antigo para compatibilidade
       const activeKey = updatedKeys.find((k) => k.isActive);
       if (activeKey) {
@@ -71,7 +78,7 @@ export default function PixKeysScreen({ navigation }: any) {
         await AsyncStorage.setItem("merchantName", activeKey.merchantName);
         await AsyncStorage.setItem("merchantCity", activeKey.merchantCity);
       }
-      
+
       Alert.alert("Sucesso", "Chave Pix ativa atualizada!");
     } catch (error) {
       console.error("Erro ao selecionar chave:", error);
@@ -81,7 +88,7 @@ export default function PixKeysScreen({ navigation }: any) {
 
   const handleDeleteKey = async (keyId: string) => {
     const keyToDelete = pixKeys.find((k) => k.id === keyId);
-    
+
     if (keyToDelete?.isActive && pixKeys.length > 1) {
       Alert.alert(
         "Atenção",
@@ -102,14 +109,17 @@ export default function PixKeysScreen({ navigation }: any) {
             try {
               const updatedKeys = pixKeys.filter((k) => k.id !== keyId);
               setPixKeys(updatedKeys);
-              await AsyncStorage.setItem("pixKeys", JSON.stringify(updatedKeys));
-              
+              await AsyncStorage.setItem(
+                "pixKeys",
+                JSON.stringify(updatedKeys)
+              );
+
               if (updatedKeys.length === 0) {
                 await AsyncStorage.removeItem("pixKey");
                 await AsyncStorage.removeItem("merchantName");
                 await AsyncStorage.removeItem("merchantCity");
               }
-              
+
               Alert.alert("Sucesso", "Chave Pix excluída!");
             } catch (error) {
               console.error("Erro ao excluir chave:", error);
@@ -137,7 +147,11 @@ export default function PixKeysScreen({ navigation }: any) {
   return (
     <Box flex={1} bg="$blue50">
       {/* Header */}
-      <Box px="$4" pt={isSmallScreen ? "$8" : "$12"} pb={isSmallScreen ? "$3" : "$6"}>
+      <Box
+        px="$4"
+        pt={isSmallScreen ? "$8" : "$12"}
+        pb={isSmallScreen ? "$3" : "$6"}
+      >
         <HStack alignItems="center" mb="$4">
           <Pressable
             onPress={() => navigation.goBack()}
@@ -153,18 +167,14 @@ export default function PixKeysScreen({ navigation }: any) {
               Minhas Chaves Pix
             </Text>
             <Text size="sm" color="$gray600" mt="$1">
-              {pixKeys.length} {pixKeys.length === 1 ? "chave cadastrada" : "chaves cadastradas"}
+              {pixKeys.length}{" "}
+              {pixKeys.length === 1 ? "chave cadastrada" : "chaves cadastradas"}
             </Text>
           </VStack>
         </HStack>
 
         {/* Donate Button */}
-        <Button
-          onPress={handleDonate}
-          size="md"
-          bg="$amber600"
-          mb="$4"
-        >
+        <Button onPress={handleDonate} size="md" bg="$amber600" mb="$4">
           <ButtonIcon as={Coffee} mr="$2" />
           <ButtonText>☕ Doar um Café ao Desenvolvedor</ButtonText>
         </Button>
@@ -212,7 +222,8 @@ export default function PixKeysScreen({ navigation }: any) {
             <Card size="md" mb="$4">
               <VStack p="$6" alignItems="center">
                 <Text size="md" color="$gray500" textAlign="center">
-                  Nenhuma chave cadastrada.{"\n"}Adicione sua primeira chave Pix!
+                  Nenhuma chave cadastrada.{"\n"}Adicione sua primeira chave
+                  Pix!
                 </Text>
               </VStack>
             </Card>
@@ -229,7 +240,11 @@ export default function PixKeysScreen({ navigation }: any) {
                   }}
                 >
                   <VStack p="$4">
-                    <HStack justifyContent="space-between" alignItems="flex-start" mb="$2">
+                    <HStack
+                      justifyContent="space-between"
+                      alignItems="flex-start"
+                      mb="$2"
+                    >
                       <VStack flex={1}>
                         <Text size="md" bold color="$gray800">
                           {key.merchantName}
@@ -242,12 +257,7 @@ export default function PixKeysScreen({ navigation }: any) {
                         </Text>
                       </VStack>
                       {key.isActive && (
-                        <Box
-                          bg="$blue100"
-                          rounded="$full"
-                          px="$3"
-                          py="$1"
-                        >
+                        <Box bg="$blue100" rounded="$full" px="$3" py="$1">
                           <Text size="xs" bold color="$blue700">
                             ATIVA
                           </Text>
@@ -270,7 +280,9 @@ export default function PixKeysScreen({ navigation }: any) {
                       <Button
                         size="sm"
                         variant="outline"
-                        onPress={() => navigation.navigate("Config", { editKeyId: key.id })}
+                        onPress={() =>
+                          navigation.navigate("Config", { editKeyId: key.id })
+                        }
                         flex={1}
                       >
                         <ButtonIcon as={Edit} mr="$1" />
