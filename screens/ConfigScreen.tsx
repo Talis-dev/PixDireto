@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import {
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  Alert,
+} from "react-native";
 import {
   Box,
   VStack,
@@ -22,11 +27,21 @@ import { Settings, Save } from "lucide-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { isValidPixKey } from "../utils/pixGenerator";
 
-export default function ConfigScreen({ navigation }: any) {
+interface PixKey {
+  id: string;
+  pixKey: string;
+  merchantName: string;
+  merchantCity: string;
+  isActive: boolean;
+}
+
+export default function ConfigScreen({ navigation, route }: any) {
   const [pixKey, setPixKey] = useState("");
   const [name, setName] = useState("");
   const [city, setCity] = useState("");
   const [errors, setErrors] = useState({ pixKey: "", name: "", city: "" });
+  const [isEditing, setIsEditing] = useState(false);
+  const [editKeyId, setEditKeyId] = useState<string | null>(null);
 
   useEffect(() => {
     loadConfig();
@@ -34,13 +49,24 @@ export default function ConfigScreen({ navigation }: any) {
 
   const loadConfig = async () => {
     try {
-      const savedPixKey = await AsyncStorage.getItem("pixKey");
-      const savedName = await AsyncStorage.getItem("merchantName");
-      const savedCity = await AsyncStorage.getItem("merchantCity");
+      const editId = route?.params?.editKeyId;
 
-      if (savedPixKey) setPixKey(savedPixKey);
-      if (savedName) setName(savedName);
-      if (savedCity) setCity(savedCity);
+      if (editId) {
+        // Modo de edição
+        setIsEditing(true);
+        setEditKeyId(editId);
+
+        const keysData = await AsyncStorage.getItem("pixKeys");
+        if (keysData) {
+          const keys: PixKey[] = JSON.parse(keysData);
+          const keyToEdit = keys.find((k) => k.id === editId);
+          if (keyToEdit) {
+            setPixKey(keyToEdit.pixKey);
+            setName(keyToEdit.merchantName);
+            setCity(keyToEdit.merchantCity);
+          }
+        }
+      }
     } catch (error) {
       console.error("Erro ao carregar configurações:", error);
     }
@@ -82,13 +108,58 @@ export default function ConfigScreen({ navigation }: any) {
     if (!validateForm()) return;
 
     try {
-      await AsyncStorage.setItem("pixKey", pixKey.trim());
-      await AsyncStorage.setItem("merchantName", name.trim());
-      await AsyncStorage.setItem("merchantCity", city.trim());
+      const keysData = await AsyncStorage.getItem("pixKeys");
+      let keys: PixKey[] = keysData ? JSON.parse(keysData) : [];
 
-      navigation.navigate("Home");
+      if (isEditing && editKeyId) {
+        // Atualizar chave existente
+        keys = keys.map((key) =>
+          key.id === editKeyId
+            ? {
+                ...key,
+                pixKey: pixKey.trim(),
+                merchantName: name.trim(),
+                merchantCity: city.trim(),
+              }
+            : key
+        );
+
+        // Atualizar valores antigos se for a chave ativa
+        const editedKey = keys.find((k) => k.id === editKeyId);
+        if (editedKey?.isActive) {
+          await AsyncStorage.setItem("pixKey", pixKey.trim());
+          await AsyncStorage.setItem("merchantName", name.trim());
+          await AsyncStorage.setItem("merchantCity", city.trim());
+        }
+
+        Alert.alert("Sucesso", "Chave Pix atualizada!");
+      } else {
+        // Adicionar nova chave
+        const newKey: PixKey = {
+          id: Date.now().toString(),
+          pixKey: pixKey.trim(),
+          merchantName: name.trim(),
+          merchantCity: city.trim(),
+          isActive: keys.length === 0, // Primeira chave é ativa por padrão
+        };
+
+        keys.push(newKey);
+
+        // Se for a primeira chave, salvar no formato antigo também
+        if (newKey.isActive) {
+          await AsyncStorage.setItem("pixKey", newKey.pixKey);
+          await AsyncStorage.setItem("merchantName", newKey.merchantName);
+          await AsyncStorage.setItem("merchantCity", newKey.merchantCity);
+        }
+
+        Alert.alert("Sucesso", "Chave Pix adicionada!");
+      }
+
+      await AsyncStorage.setItem("pixKeys", JSON.stringify(keys));
+      navigation.navigate("PixKeys");
     } catch (error) {
       console.error("Erro ao salvar configurações:", error);
+      Alert.alert("Erro", "Não foi possível salvar a chave.");
     }
   };
 
@@ -105,10 +176,12 @@ export default function ConfigScreen({ navigation }: any) {
               <Settings color="white" size={32} />
             </Box>
             <Text size="3xl" bold color="$gray800">
-              Configuração
+              {isEditing ? "Editar Chave Pix" : "Nova Chave Pix"}
             </Text>
             <Text size="md" color="$gray600" textAlign="center">
-              Configure seus dados para receber pagamentos via Pix
+              {isEditing
+                ? "Atualize os dados da sua chave Pix"
+                : "Adicione uma nova chave para receber pagamentos"}
             </Text>
           </VStack>
 
@@ -186,21 +259,30 @@ export default function ConfigScreen({ navigation }: any) {
             </FormControl>
           </VStack>
 
-          {/* Save Button */}
-          <Button size="lg" mt="$8" onPress={handleSave}>
+         {/* Save Button */}
+          <Button size="lg" onPress={handleSave} mt="$8">
             <ButtonIcon as={Save} mr="$2" />
-            <ButtonText>Salvar Configurações</ButtonText>
+            <ButtonText>
+              {isEditing ? "Atualizar Chave" : "Adicionar Chave"}
+            </ButtonText>
           </Button>
 
           {/* Info Card */}
-          <Box mt="$8" bg="$blue50" rounded="$xl" p="$4" borderColor="$blue200" borderWidth={1}>
+          <Box
+            mt="$8"
+            bg="$blue50"
+            rounded="$xl"
+            p="$4"
+            borderColor="$blue200"
+            borderWidth={1}
+          >
             <Text size="md" bold color="$blue800" mb="$2">
               ℹ️ Informações Importantes
             </Text>
             <Text size="sm" color="$blue700" lineHeight="$sm">
-              • Seus dados são salvos apenas no seu dispositivo{"\n"}
-              • A chave Pix deve estar ativa na sua conta{"\n"}
-              • O nome será exibido para quem efetuar o pagamento
+              • Seus dados são salvos apenas no seu dispositivo{"\n"}• A chave
+              Pix deve estar ativa na sua conta{"\n"}• O nome será exibido para
+              quem efetuar o pagamento
             </Text>
           </Box>
         </Box>
@@ -208,4 +290,3 @@ export default function ConfigScreen({ navigation }: any) {
     </KeyboardAvoidingView>
   );
 }
-
