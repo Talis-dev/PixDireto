@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Política de Privacidade do PixDireto - Gerador de QR Code Pix. Seus dados ficam seguros no seu celular, não coletamos informações."
+    />
+    <meta
+      name="keywords"
+      content="PixDireto, política de privacidade, LGPD, privacidade, app pix, segurança"
+    />
+    <meta name="author" content="Talis Dev" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Política de Privacidade - PixDireto" />
+    <meta
+      property="og:description"
+      content="Seus dados ficam seguros no seu celular. Não coletamos nenhuma informação pessoal."
+    />
+
+    <title>Política de Privacidade - PixDireto</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary-color: #06153e;
+        --secondary-color: #32bcad;
+        --text-color: #333;
+        --text-light: #666;
+        --bg-light: #f8f9fa;
+        --border-color: #e0e0e0;
+        --success-color: #10b981;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.6;
+        color: var(--text-color);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          #0a2351 100%
+        );
+        color: white;
+        padding: 40px 30px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      .header .app-name {
+        color: var(--secondary-color);
+        font-weight: 800;
+      }
+
+      .header p {
+        font-size: 1.1em;
+        opacity: 0.9;
+        margin-top: 10px;
+      }
+
+      .last-updated {
+        background: var(--bg-light);
+        padding: 15px 30px;
+        border-left: 4px solid var(--secondary-color);
+        font-size: 0.95em;
+        color: var(--text-light);
+      }
+
+      .content {
+        padding: 40px 30px;
+      }
+
+      .intro {
+        background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+        border-left: 5px solid var(--secondary-color);
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+      }
+
+      .intro strong {
+        color: var(--primary-color);
+        font-size: 1.1em;
+      }
+
+      h2 {
+        color: var(--primary-color);
+        font-size: 1.8em;
+        margin-top: 40px;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 3px solid var(--secondary-color);
+        font-weight: 700;
+      }
+
+      h3 {
+        color: var(--primary-color);
+        font-size: 1.3em;
+        margin-top: 25px;
+        margin-bottom: 10px;
+        font-weight: 600;
+      }
+
+      p {
+        margin-bottom: 15px;
+        line-height: 1.8;
+        color: var(--text-color);
+      }
+
+      ul {
+        margin: 15px 0;
+        padding-left: 30px;
+      }
+
+      li {
+        margin-bottom: 10px;
+        line-height: 1.7;
+      }
+
+      .highlight-box {
+        background: #fff9e6;
+        border-left: 5px solid #ffc107;
+        padding: 20px;
+        margin: 25px 0;
+        border-radius: 8px;
+      }
+
+      .highlight-box strong {
+        color: #f57c00;
+        font-size: 1.1em;
+      }
+
+      .security-badge {
+        display: inline-flex;
+        align-items: center;
+        background: var(--success-color);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        margin: 5px 5px 5px 0;
+        font-size: 0.9em;
+      }
+
+      .security-badge::before {
+        content: "✓";
+        margin-right: 8px;
+        font-weight: bold;
+        font-size: 1.2em;
+      }
+
+      .no-collect-box {
+        background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+        border-left: 5px solid #f44336;
+        padding: 20px;
+        margin: 25px 0;
+        border-radius: 8px;
+      }
+
+      .no-collect-box strong {
+        color: #c62828;
+        font-size: 1.2em;
+      }
+
+      .contact-box {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          #0a2351 100%
+        );
+        color: white;
+        padding: 30px;
+        border-radius: 12px;
+        margin: 40px 0 20px;
+        text-align: center;
+      }
+
+      .contact-box h2 {
+        color: white;
+        border: none;
+        margin: 0 0 15px;
+      }
+
+      .contact-box a {
+        color: var(--secondary-color);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.1em;
+      }
+
+      .contact-box a:hover {
+        text-decoration: underline;
+      }
+
+      .footer {
+        background: var(--bg-light);
+        padding: 20px 30px;
+        text-align: center;
+        color: var(--text-light);
+        font-size: 0.9em;
+        border-top: 1px solid var(--border-color);
+      }
+
+      .footer strong {
+        color: var(--primary-color);
+      }
+
+      .toc {
+        background: var(--bg-light);
+        padding: 20px;
+        border-radius: 8px;
+        margin: 30px 0;
+      }
+
+      .toc h3 {
+        margin-top: 0;
+        color: var(--primary-color);
+      }
+
+      .toc ul {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .toc li {
+        margin: 8px 0;
+      }
+
+      .toc a {
+        color: var(--secondary-color);
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .toc a:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 10px;
+        }
+
+        .header h1 {
+          font-size: 1.8em;
+        }
+
+        .content {
+          padding: 25px 20px;
+        }
+
+        h2 {
+          font-size: 1.5em;
+        }
+
+        h3 {
+          font-size: 1.2em;
+        }
+      }
+
+      .section {
+        scroll-margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>Política de Privacidade</h1>
+        <h2 class="app-name">PixDireto</h2>
+        <p>Gerador de QR Code Pix - Seus dados são seus!</p>
+      </header>
+
+      <div class="last-updated">
+        <strong>Última atualização:</strong> 09 de janeiro de 2026
+      </div>
+
+      <main class="content">
+        <div class="intro">
+          <p>
+            <strong>🔒 Transparência Total:</strong> O PixDireto respeita sua
+            privacidade e está comprometido em proteger seus dados pessoais.
+            Esta Política de Privacidade explica como tratamos suas informações
+            de forma clara e transparente.
+          </p>
+        </div>
+
+        <div class="toc">
+          <h3>📋 Índice</h3>
+          <ul>
+            <li><a href="#introducao">1. Introdução</a></li>
+            <li><a href="#coleta">2. Informações que Coletamos</a></li>
+            <li><a href="#uso">3. Como Usamos Suas Informações</a></li>
+            <li>
+              <a href="#compartilhamento">4. Compartilhamento de Dados</a>
+            </li>
+            <li><a href="#seguranca">5. Segurança</a></li>
+            <li><a href="#permissoes">6. Permissões do Aplicativo</a></li>
+            <li><a href="#offline">7. Uso Offline</a></li>
+            <li><a href="#criancas">8. Dados de Crianças</a></li>
+            <li><a href="#direitos">9. Seus Direitos</a></li>
+            <li><a href="#legislacao">10. Legislação Aplicável</a></li>
+            <li><a href="#contato">11. Contato</a></li>
+          </ul>
+        </div>
+
+        <section id="introducao" class="section">
+          <h2>1. Introdução</h2>
+          <p>
+            O <strong>PixDireto</strong> ("nós", "nosso" ou "aplicativo") é um
+            aplicativo mobile desenvolvido para gerar QR Codes Pix de forma
+            rápida e profissional. Valorizamos sua privacidade e construímos o
+            app com a filosofia de <strong>"Privacy by Design"</strong> - seus
+            dados permanecem exclusivamente no seu dispositivo.
+          </p>
+        </section>
+
+        <section id="coleta" class="section">
+          <h2>2. Informações que Coletamos</h2>
+
+          <h3>2.1 Dados Armazenados Localmente</h3>
+          <p>
+            O PixDireto armazena as seguintes informações
+            <strong>apenas no seu dispositivo</strong> usando AsyncStorage
+            (armazenamento local do Android):
+          </p>
+
+          <ul>
+            <li>
+              <strong>Chaves Pix:</strong> CPF, CNPJ, telefone, email ou chave
+              aleatória que você cadastrar
+            </li>
+            <li>
+              <strong>Dados do Comerciante:</strong> Nome e cidade para geração
+              de QR Codes conforme padrão do Banco Central
+            </li>
+            <li>
+              <strong>Produtos Cadastrados:</strong> Nome e valor dos
+              produtos/serviços que você criar
+            </li>
+            <li>
+              <strong>Preferências:</strong> Configurações do aplicativo (como
+              chave Pix ativa selecionada)
+            </li>
+          </ul>
+
+          <div class="highlight-box">
+            <p>
+              <strong>⚠️ IMPORTANTE:</strong> Todas essas informações ficam
+              armazenadas exclusivamente no seu smartphone usando o
+              armazenamento local do Android. Nós <strong>NÃO</strong> temos
+              acesso a esses dados. Eles não são enviados para nenhum servidor,
+              banco de dados ou serviço na nuvem.
+            </p>
+          </div>
+
+          <h3>2.2 Dados NÃO Coletados</h3>
+          <div class="no-collect-box">
+            <p>
+              <strong
+                >❌ O PixDireto NÃO coleta, transmite ou armazena em
+                servidores:</strong
+              >
+            </p>
+          </div>
+
+          <ul>
+            <li>
+              Dados pessoais identificáveis (além dos que você cadastra
+              localmente)
+            </li>
+            <li>Histórico de transações ou pagamentos</li>
+            <li>Valores de pagamentos recebidos</li>
+            <li>Dados bancários ou senhas</li>
+            <li>Localização GPS</li>
+            <li>Lista de contatos</li>
+            <li>Fotos, vídeos ou outras mídias</li>
+            <li>Dados de uso do aplicativo (analytics)</li>
+            <li>Identificadores de dispositivo</li>
+            <li>Dados de navegação ou comportamento</li>
+          </ul>
+
+          <div style="margin: 20px 0">
+            <span class="security-badge">100% Offline</span>
+            <span class="security-badge">Zero Rastreamento</span>
+            <span class="security-badge">Sem Analytics</span>
+            <span class="security-badge">Dados Locais</span>
+          </div>
+        </section>
+
+        <section id="uso" class="section">
+          <h2>3. Como Usamos Suas Informações</h2>
+          <p>
+            As informações armazenadas localmente no seu dispositivo são
+            utilizadas exclusivamente para:
+          </p>
+
+          <ul>
+            <li>
+              <strong>Gerar QR Codes Pix:</strong> Conforme padrão EMV definido
+              pelo Banco Central do Brasil
+            </li>
+            <li>
+              <strong>Exibir suas chaves:</strong> Mostrar a lista de chaves Pix
+              que você cadastrou
+            </li>
+            <li>
+              <strong>Gerenciar produtos:</strong> Exibir lista de
+              produtos/serviços com valores pré-definidos
+            </li>
+            <li>
+              <strong>Gerar PDFs:</strong> Criar documentos com QR Code e
+              informações de cobrança
+            </li>
+            <li>
+              <strong>Manter preferências:</strong> Lembrar qual chave Pix está
+              ativa
+            </li>
+          </ul>
+
+          <p>
+            <strong>Importante:</strong> Como todos os dados ficam apenas no seu
+            celular, nenhuma informação é processada em servidores externos ou
+            compartilhada com terceiros.
+          </p>
+        </section>
+
+        <section id="compartilhamento" class="section">
+          <h2>4. Compartilhamento de Dados</h2>
+
+          <div class="no-collect-box">
+            <p>
+              <strong
+                >🚫 O PixDireto NÃO compartilha seus dados com terceiros,
+                pois:</strong
+              >
+            </p>
+          </div>
+
+          <ul>
+            <li>
+              ❌ Não coletamos dados em servidores próprios ou de terceiros
+            </li>
+            <li>
+              ❌ Não temos parcerias com empresas de analytics ou publicidade
+            </li>
+            <li>
+              ❌ Não vendemos, alugamos ou transferimos informações de usuários
+            </li>
+            <li>
+              ❌ Não usamos ferramentas de rastreamento (Google Analytics,
+              Facebook Pixel, etc)
+            </li>
+            <li>❌ Não enviamos dados para a nuvem ou serviços externos</li>
+          </ul>
+
+          <p>
+            <strong>Exceção:</strong> Quando você usa a função "Compartilhar" do
+            app, o PDF ou código Pix é compartilhado através do aplicativo que
+            você escolher (WhatsApp, Email, etc), mas isso é controlado por você
+            e pelo sistema operacional Android, não pelo PixDireto.
+          </p>
+        </section>
+
+        <section id="seguranca" class="section">
+          <h2>5. Segurança</h2>
+          <p>
+            Como todos os dados ficam armazenados apenas no seu dispositivo:
+          </p>
+
+          <ul>
+            <li>
+              ✅ <strong>Você tem controle total</strong> sobre suas informações
+            </li>
+            <li>
+              ✅ Os dados são protegidos pelo
+              <strong>sistema de segurança do Android</strong>
+            </li>
+            <li>
+              ✅ <strong>Desinstalar o app</strong> remove automaticamente todos
+              os dados armazenados
+            </li>
+            <li>
+              ✅ Não há risco de vazamento de dados por invasão de servidores
+              (pois não temos servidores)
+            </li>
+            <li>
+              ✅ Seus dados não podem ser acessados por outras pessoas, a menos
+              que tenham acesso físico ao seu celular desbloqueado
+            </li>
+          </ul>
+
+          <div class="highlight-box">
+            <p>
+              <strong>💡 Recomendação de Segurança:</strong> Mantenha seu
+              smartphone protegido com senha, PIN, padrão ou biometria
+              (impressão digital/reconhecimento facial) para evitar acesso não
+              autorizado aos seus dados.
+            </p>
+          </div>
+        </section>
+
+        <section id="permissoes" class="section">
+          <h2>6. Permissões do Aplicativo</h2>
+
+          <h3>6.1 Permissões Utilizadas</h3>
+          <p>O PixDireto solicita as seguintes permissões do Android:</p>
+
+          <ul>
+            <li>
+              <strong>INTERNET:</strong> Utilizada apenas para carregar
+              dependências do Expo durante desenvolvimento. O app funciona 100%
+              offline após instalação.
+            </li>
+            <li>
+              <strong>WRITE_EXTERNAL_STORAGE:</strong> Para salvar PDFs gerados
+              com QR Codes na galeria/downloads do seu celular (apenas quando
+              você solicita).
+            </li>
+            <li>
+              <strong>READ_EXTERNAL_STORAGE:</strong> Para acessar o ícone do
+              app ao gerar PDFs personalizados.
+            </li>
+          </ul>
+
+          <h3>6.2 Permissões NÃO Solicitadas</h3>
+          <p>
+            O PixDireto <strong>NÃO solicita</strong> as seguintes permissões
+            sensíveis:
+          </p>
+
+          <ul>
+            <li>❌ Localização (GPS)</li>
+            <li>❌ Câmera</li>
+            <li>❌ Microfone</li>
+            <li>❌ Contatos</li>
+            <li>❌ Calendário</li>
+            <li>❌ SMS ou histórico de chamadas</li>
+            <li>❌ Sensores corporais</li>
+          </ul>
+        </section>
+
+        <section id="offline" class="section">
+          <h2>7. Uso Offline</h2>
+          <p>
+            O aplicativo funciona <strong>100% offline</strong> após a
+            configuração inicial. Não é necessária conexão com internet para:
+          </p>
+
+          <ul>
+            <li>✅ Gerar QR Codes Pix</li>
+            <li>✅ Gerenciar suas chaves Pix</li>
+            <li>✅ Cadastrar e editar produtos</li>
+            <li>✅ Exportar PDFs</li>
+            <li>✅ Todas as funcionalidades principais</li>
+          </ul>
+
+          <p>
+            <strong>Conectividade necessária apenas para:</strong> Compartilhar
+            PDFs via internet (WhatsApp, Email, etc) - mas isso é opcional.
+          </p>
+        </section>
+
+        <section id="criancas" class="section">
+          <h2>8. Dados de Crianças</h2>
+          <p>
+            O PixDireto não é direcionado a menores de 18 anos. O app é uma
+            ferramenta de negócios destinada a empreendedores, comerciantes e
+            profissionais autônomos. Não coletamos intencionalmente informações
+            de crianças ou adolescentes.
+          </p>
+        </section>
+
+        <section id="direitos" class="section">
+          <h2>9. Seus Direitos (LGPD)</h2>
+          <p>
+            De acordo com a Lei Geral de Proteção de Dados (LGPD), você tem os
+            seguintes direitos:
+          </p>
+
+          <ul>
+            <li>
+              <strong>Acesso:</strong> Todos os seus dados ficam visíveis e
+              acessíveis dentro do app
+            </li>
+            <li>
+              <strong>Correção:</strong> Você pode editar suas chaves Pix e
+              produtos a qualquer momento
+            </li>
+            <li>
+              <strong>Exclusão:</strong> Pode deletar chaves e produtos
+              individualmente ou desinstalar o app para remover tudo
+            </li>
+            <li>
+              <strong>Portabilidade:</strong> Pode copiar/anotar suas
+              informações para transferir para outro sistema
+            </li>
+            <li>
+              <strong>Revogação:</strong> Pode desinstalar o app a qualquer
+              momento
+            </li>
+            <li>
+              <strong>Informação:</strong> Esta política fornece transparência
+              sobre o tratamento de dados
+            </li>
+          </ul>
+
+          <p>
+            <strong>Como exercer seus direitos:</strong> Como os dados ficam
+            apenas no seu celular, você tem controle direto. Para questões
+            adicionais, entre em contato através dos canais listados na seção
+            "Contato".
+          </p>
+        </section>
+
+        <section id="legislacao" class="section">
+          <h2>10. Legislação Aplicável</h2>
+          <p>Esta Política de Privacidade está em conformidade com:</p>
+
+          <ul>
+            <li>
+              <strong>LGPD</strong> - Lei Geral de Proteção de Dados (Lei nº
+              13.709/2018)
+            </li>
+            <li>
+              <strong>Marco Civil da Internet</strong> (Lei nº 12.965/2014)
+            </li>
+            <li>
+              <strong>Código de Defesa do Consumidor</strong> (Lei nº
+              8.078/1990)
+            </li>
+            <li><strong>Políticas da Google Play Store</strong></li>
+          </ul>
+
+          <p>
+            <strong>Jurisdição:</strong> Brasil. Leis brasileiras aplicáveis.
+          </p>
+        </section>
+
+        <section id="contato" class="section">
+          <div class="contact-box">
+            <h2>11. Entre em Contato</h2>
+            <p>
+              Se você tiver dúvidas sobre esta Política de Privacidade ou sobre
+              como tratamos seus dados, entre em contato:
+            </p>
+            <p style="margin-top: 20px">
+              <strong>📧 Email:</strong>
+              <a href="mailto:talisdev@exemplo.com">talisdev@exemplo.com</a
+              ><br />
+              <strong>👨‍💻 Desenvolvedor:</strong> Talis Dev<br />
+              <strong>🌐 Website:</strong>
+              <a href="https://pixdireto.vercel.app" target="_blank"
+                >pixdireto.vercel.app</a
+              >
+            </p>
+            <p style="margin-top: 15px; font-size: 0.95em; opacity: 0.9">
+              Tempo de resposta: até 48 horas úteis
+            </p>
+          </div>
+        </section>
+
+        <section>
+          <h2>12. Alterações nesta Política</h2>
+          <p>
+            Podemos atualizar esta Política de Privacidade ocasionalmente para
+            refletir mudanças nas nossas práticas ou por outros motivos
+            operacionais, legais ou regulatórios.
+          </p>
+
+          <p><strong>Como você será notificado:</strong></p>
+          <ul>
+            <li>
+              Atualizações significativas serão comunicadas através de uma
+              atualização do app na Play Store
+            </li>
+            <li>
+              A data de "Última atualização" no topo desta página será
+              modificada
+            </li>
+            <li>Mudanças importantes terão um aviso dentro do aplicativo</li>
+          </ul>
+
+          <p>
+            <strong>Recomendação:</strong> Revise esta política periodicamente
+            para se manter informado sobre como protegemos seus dados.
+          </p>
+        </section>
+
+        <div class="highlight-box" style="margin-top: 40px">
+          <p>
+            <strong
+              >📜 Ao usar o PixDireto, você concorda com esta Política de
+              Privacidade.</strong
+            >
+          </p>
+          <p style="margin-top: 10px">
+            Se você não concorda com qualquer parte desta política, por favor,
+            não use o aplicativo.
+          </p>
+        </div>
+
+        <div
+          style="
+            text-align: center;
+            margin-top: 40px;
+            padding: 30px;
+            background: var(--bg-light);
+            border-radius: 12px;
+          "
+        >
+          <p
+            style="
+              font-size: 1.1em;
+              color: var(--primary-color);
+              font-weight: 600;
+            "
+          >
+            ✅ Resumo: Seus dados são 100% seus. Ficam no seu celular. Não
+            compartilhamos com ninguém.
+          </p>
+          <p style="margin-top: 15px; color: var(--text-light)">
+            <em
+              >Política de Privacidade simples, clara e transparente - como deve
+              ser!</em
+            >
+          </p>
+        </div>
+      </main>
+
+      <footer class="footer">
+        <p><strong>PixDireto</strong> - Gerador de QR Code Pix Profissional</p>
+        <p>© 2026 Talis Dev. Todos os direitos reservados.</p>
+        <p style="margin-top: 10px; font-size: 0.85em">
+          Desenvolvido com ❤️ no Brasil | Versão da Política: 1.0
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "name": "pixdireto-privacy",
+  "builds": [
+    {
+      "src": "privacy-policy.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/privacy-policy.html"
+    },
+    {
+      "src": "/privacy",
+      "dest": "/privacy-policy.html"
+    },
+    {
+      "src": "/privacidade",
+      "dest": "/privacy-policy.html"
+    },
+    {
+      "src": "/privacy-policy",
+      "dest": "/privacy-policy.html"
+    }
+  ]
+}
