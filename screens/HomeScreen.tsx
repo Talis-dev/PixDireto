@@ -11,6 +11,7 @@ import {
 } from "@gluestack-ui/themed";
 import { Delete, QrCode, Settings, Key } from "lucide-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { PixIcon } from "../icons/PixIcon";
 
 const { height } = Dimensions.get("window");
 
@@ -153,7 +154,7 @@ export default function HomeScreen({ navigation }: any) {
             <Pressable
               onPress={() => navigation.navigate("Config")}
               style={{
-                backgroundColor: "white",
+                backgroundColor: "#32BCAD",
                 borderRadius: 50,
                 padding: 12,
                 shadowColor: "#000",
@@ -163,7 +164,7 @@ export default function HomeScreen({ navigation }: any) {
                 elevation: 2,
               }}
             >
-              <Settings color="#3B82F6" size={24} />
+              <PixIcon width={24} height={24} />
             </Pressable>
           </HStack>
         </HStack>

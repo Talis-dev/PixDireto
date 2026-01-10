@@ -135,7 +135,7 @@ export default function PixKeysScreen({ navigation }: any) {
     navigation.navigate("QRCode", {
       amount: 5.0,
       isDonation: true,
-      donationKey: "sua-chave-pix@email.com", //TODO: ALTERE AQUI para sua chave Pix
+      donationKey: "staranytech@gmail.com", //TODO: ALTERE AQUI para sua chave Pix
       donationName: "Desenvolvedor Pix Direto",
       donationCity: "São Paulo",
     });

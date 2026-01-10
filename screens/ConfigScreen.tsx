@@ -4,6 +4,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
+  Pressable,
 } from "react-native";
 import {
   Box,
@@ -23,9 +24,10 @@ import {
   FormControlHelper,
   FormControlHelperText,
 } from "@gluestack-ui/themed";
-import { Settings, Save } from "lucide-react-native";
+import { Save, ArrowLeft } from "lucide-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { isValidPixKey } from "../utils/pixGenerator";
+import { PixIcon } from "../icons/PixIcon";
 
 interface PixKey {
   id: string;
@@ -170,10 +172,24 @@ export default function ConfigScreen({ navigation, route }: any) {
     >
       <ScrollView style={{ flex: 1, backgroundColor: "#F0F9FF" }}>
         <Box px="$6" pt="$12" pb="$8">
+          {/* Back Button */}
+          <Pressable
+            onPress={() => navigation.goBack()}
+            style={{
+              position: "absolute",
+              top: 48,
+              left: 24,
+              zIndex: 10,
+              padding: 8,
+            }}
+          >
+            <ArrowLeft color="#3B82F6" size={24} />
+          </Pressable>
+
           {/* Header */}
           <VStack space="lg" alignItems="center" mb="$8">
-            <Box bg="$blue600" rounded="$full" p="$4" mb="$2">
-              <Settings color="white" size={32} />
+            <Box bg="#32BCAD" rounded="$full" p="$4" mb="$2">
+              <PixIcon width={32} height={32} />
             </Box>
             <Text size="3xl" bold color="$gray800">
               {isEditing ? "Editar Chave Pix" : "Nova Chave Pix"}
@@ -259,7 +275,7 @@ export default function ConfigScreen({ navigation, route }: any) {
             </FormControl>
           </VStack>
 
-         {/* Save Button */}
+          {/* Save Button */}
           <Button size="lg" onPress={handleSave} mt="$8">
             <ButtonIcon as={Save} mr="$2" />
             <ButtonText>
