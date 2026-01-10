@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Vibration, Pressable, Dimensions } from "react-native";
+import { Vibration, Pressable, Dimensions, Image } from "react-native";
 import {
   Box,
   VStack,
@@ -9,13 +9,20 @@ import {
   ButtonText,
   ButtonIcon,
 } from "@gluestack-ui/themed";
-import { Delete, QrCode, Settings, Key } from "lucide-react-native";
+import {
+  Delete,
+  QrCode,
+  Settings,
+  Key,
+  ShoppingCart,
+} from "lucide-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { PixIcon } from "../icons/PixIcon";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const { height } = Dimensions.get("window");
 
-export default function HomeScreen({ navigation }: any) {
+export default function HomeScreen({ navigation, route }: any) {
   const [amount, setAmount] = useState("0");
   const [hasConfig, setHasConfig] = useState(false);
   const [activeMerchantName, setActiveMerchantName] = useState("");
@@ -27,9 +34,16 @@ export default function HomeScreen({ navigation }: any) {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       checkConfig();
+      // Verifica se há um valor selecionado vindo da tela de produtos
+      if (route.params?.selectedValue) {
+        const valueInCents = Math.round(route.params.selectedValue * 100);
+        setAmount(valueInCents.toString());
+        // Limpa o parâmetro para não aplicar novamente
+        navigation.setParams({ selectedValue: undefined });
+      }
     });
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, route.params?.selectedValue]);
 
   const checkConfig = async () => {
     try {
@@ -119,150 +133,177 @@ export default function HomeScreen({ navigation }: any) {
   );
 
   return (
-    <Box flex={1} bg="$blue50">
-      {/* Header */}
-      <Box
-        px="$4"
-        pt={isSmallScreen ? "$8" : "$12"}
-        pb={isSmallScreen ? "$3" : "$6"}
-      >
-        <HStack justifyContent="space-between" alignItems="center">
-          <VStack flex={1}>
-            <Text size={isSmallScreen ? "2xl" : "3xl"} bold color="$gray800">
-              Pix Direto
-            </Text>
-            <Text size="sm" color="$gray600" mt="$1">
-              {hasConfig ? `${activeMerchantName}` : "Configure sua chave Pix"}
-            </Text>
-          </VStack>
-          <HStack space="sm">
-            <Pressable
-              onPress={() => navigation.navigate("PixKeys")}
-              style={{
-                backgroundColor: "white",
-                borderRadius: 50,
-                padding: 12,
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 1 },
-                shadowOpacity: 0.1,
-                shadowRadius: 2,
-                elevation: 2,
-              }}
-            >
-              <Key color="#10B981" size={24} />
-            </Pressable>
-            <Pressable
-              onPress={() => navigation.navigate("Config")}
-              style={{
-                backgroundColor: "#32BCAD",
-                borderRadius: 50,
-                padding: 12,
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 1 },
-                shadowOpacity: 0.1,
-                shadowRadius: 2,
-                elevation: 2,
-              }}
-            >
-              <PixIcon width={24} height={24} />
-            </Pressable>
-          </HStack>
-        </HStack>
-      </Box>
-
-      {/* Amount Display */}
-      <Box px="$4" py={isSmallScreen ? "$3" : "$6"} alignItems="center">
-        <Text size="xs" color="$gray500" mb="$1">
-          Valor do Pix
-        </Text>
-        <Text size={isSmallScreen ? "3xl" : "4xl"} bold color="$blue600">
-          {formatCurrency(amount)}
-        </Text>
-      </Box>
-
-      {/* Custom Keypad */}
-      <Box
-        flex={1}
-        px="$4"
-        pb={isSmallScreen ? "$4" : "$6"}
-        justifyContent="flex-end"
-      >
-        <VStack space={isSmallScreen ? "xs" : "sm"}>
-          {/* Row 1 */}
-          <HStack space={isSmallScreen ? "xs" : "sm"}>
-            <KeypadButton value="1" onPress={() => handleNumberPress("1")} />
-            <KeypadButton value="2" onPress={() => handleNumberPress("2")} />
-            <KeypadButton value="3" onPress={() => handleNumberPress("3")} />
-          </HStack>
-
-          {/* Row 2 */}
-          <HStack space={isSmallScreen ? "xs" : "sm"}>
-            <KeypadButton value="4" onPress={() => handleNumberPress("4")} />
-            <KeypadButton value="5" onPress={() => handleNumberPress("5")} />
-            <KeypadButton value="6" onPress={() => handleNumberPress("6")} />
-          </HStack>
-
-          {/* Row 3 */}
-          <HStack space={isSmallScreen ? "xs" : "sm"}>
-            <KeypadButton value="7" onPress={() => handleNumberPress("7")} />
-            <KeypadButton value="8" onPress={() => handleNumberPress("8")} />
-            <KeypadButton value="9" onPress={() => handleNumberPress("9")} />
-          </HStack>
-
-          {/* Row 4 */}
-          <HStack space={isSmallScreen ? "xs" : "sm"}>
-            <KeypadButton value="00" onPress={() => handleNumberPress("00")} />
-            <KeypadButton value="0" onPress={() => handleNumberPress("0")} />
-            <Pressable
-              onPress={handleDelete}
-              style={{
-                backgroundColor: "#FEF2F2",
-                borderRadius: 12,
-                minHeight: isSmallScreen ? 56 : 64,
-                flex: 1,
-                aspectRatio: 1.3,
-                alignItems: "center",
-                justifyContent: "center",
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 1 },
-                shadowOpacity: 0.1,
-                shadowRadius: 2,
-                elevation: 2,
-                borderWidth: 1,
-                borderColor: "#FEE2E2",
-              }}
-            >
-              <Delete color="#EF4444" size={isSmallScreen ? 22 : 26} />
-            </Pressable>
-          </HStack>
-        </VStack>
-
-        {/* Generate QR Code Button */}
-        <Button
-          onPress={handleGenerateQRCode}
-          size={isSmallScreen ? "md" : "lg"}
-          mt={isSmallScreen ? "$3" : "$4"}
-          isDisabled={amount === "0"}
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: "#EFF6FF" }}
+      edges={["top", "bottom"]}
+    >
+      <Box flex={1} bg="$blue50">
+        {/* Header */}
+        <Box
+          px="$4"
+          pt={isSmallScreen ? "$3" : "$4"}
+          pb={isSmallScreen ? "$2" : "$3"}
         >
-          <ButtonIcon as={QrCode} mr="$2" />
-          <ButtonText>Gerar QR Code</ButtonText>
-        </Button>
+          <HStack justifyContent="space-between" alignItems="center">
+            <HStack flex={1} alignItems="top" space="sm">
+              <Image
+                source={require("../assets/PixDiretoLogo.png")}
+                style={{
+                  width: isSmallScreen ? 50 : 68,
+                  height: isSmallScreen ? 30 : 38,
+                  borderRadius: isSmallScreen ? 8 : 10,
+                }}
+              />
+              <VStack flex={1}>
+                <Text
+                  size={isSmallScreen ? "2xl" : "3xl"}
+                  bold
+                  color="$gray800"
+                >
+                  Pix Direto
+                </Text>
+                <Text size="sm" color="$gray600" mt="$1">
+                  {hasConfig
+                    ? `${activeMerchantName}`
+                    : "Configure sua chave Pix"}
+                </Text>
+              </VStack>
+            </HStack>
+            <HStack space="sm">
+              <Pressable
+                onPress={() => navigation.navigate("Products")}
+                style={{
+                  backgroundColor: "#10B981",
+                  borderRadius: 50,
+                  padding: 12,
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 1 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 2,
+                  elevation: 2,
+                }}
+              >
+                <ShoppingCart color="#FFFFFF" size={24} />
+              </Pressable>
 
-        {!hasConfig && (
-          <Box
-            mt="$3"
-            bg="$yellow50"
-            rounded="$xl"
-            p="$3"
-            borderColor="$yellow200"
-            borderWidth={1}
+              <Pressable
+                onPress={() => navigation.navigate("PixKeys")}
+                style={{
+                  backgroundColor: "#32BCAD",
+                  borderRadius: 50,
+                  padding: 12,
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 1 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 2,
+                  elevation: 2,
+                }}
+              >
+                <PixIcon width={24} height={24} />
+              </Pressable>
+            </HStack>
+          </HStack>
+        </Box>
+
+        {/* Amount Display */}
+        <Box px="$4" py={isSmallScreen ? "$3" : "$6"} alignItems="center">
+          <Text size="xs" color="$gray500" mb="$1">
+            Valor do Pix
+          </Text>
+          <Text size={isSmallScreen ? "3xl" : "4xl"} bold color="$blue600">
+            {formatCurrency(amount)}
+          </Text>
+        </Box>
+
+        {/* Custom Keypad */}
+        <Box
+          flex={1}
+          px="$4"
+          pb={isSmallScreen ? "$4" : "$6"}
+          justifyContent="flex-end"
+        >
+          <VStack space={isSmallScreen ? "xs" : "sm"}>
+            {/* Row 1 */}
+            <HStack space={isSmallScreen ? "xs" : "sm"}>
+              <KeypadButton value="1" onPress={() => handleNumberPress("1")} />
+              <KeypadButton value="2" onPress={() => handleNumberPress("2")} />
+              <KeypadButton value="3" onPress={() => handleNumberPress("3")} />
+            </HStack>
+
+            {/* Row 2 */}
+            <HStack space={isSmallScreen ? "xs" : "sm"}>
+              <KeypadButton value="4" onPress={() => handleNumberPress("4")} />
+              <KeypadButton value="5" onPress={() => handleNumberPress("5")} />
+              <KeypadButton value="6" onPress={() => handleNumberPress("6")} />
+            </HStack>
+
+            {/* Row 3 */}
+            <HStack space={isSmallScreen ? "xs" : "sm"}>
+              <KeypadButton value="7" onPress={() => handleNumberPress("7")} />
+              <KeypadButton value="8" onPress={() => handleNumberPress("8")} />
+              <KeypadButton value="9" onPress={() => handleNumberPress("9")} />
+            </HStack>
+
+            {/* Row 4 */}
+            <HStack space={isSmallScreen ? "xs" : "sm"}>
+              <KeypadButton
+                value="00"
+                onPress={() => handleNumberPress("00")}
+              />
+              <KeypadButton value="0" onPress={() => handleNumberPress("0")} />
+              <Pressable
+                onPress={handleDelete}
+                style={{
+                  backgroundColor: "#FEF2F2",
+                  borderRadius: 12,
+                  minHeight: isSmallScreen ? 56 : 64,
+                  flex: 1,
+                  aspectRatio: 1.3,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 1 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 2,
+                  elevation: 2,
+                  borderWidth: 1,
+                  borderColor: "#FEE2E2",
+                }}
+              >
+                <Delete color="#EF4444" size={isSmallScreen ? 22 : 26} />
+              </Pressable>
+            </HStack>
+          </VStack>
+
+          {/* Generate QR Code Button */}
+          <Button
+            onPress={handleGenerateQRCode}
+            size={isSmallScreen ? "md" : "lg"}
+            mt={isSmallScreen ? "$3" : "$4"}
+            mb="$2"
+            isDisabled={amount === "0"}
           >
-            <Text size="xs" color="$yellow800" textAlign="center">
-              ⚠️ Configure sua chave Pix antes de gerar o QR Code
-            </Text>
-          </Box>
-        )}
+            <ButtonIcon as={QrCode} mr="$2" />
+            <ButtonText>Gerar QR Code</ButtonText>
+          </Button>
+
+          {!hasConfig && (
+            <Box
+              mt="$3"
+              mb="$2"
+              bg="$yellow50"
+              rounded="$xl"
+              p="$3"
+              borderColor="$yellow200"
+              borderWidth={1}
+            >
+              <Text size="xs" color="$yellow800" textAlign="center">
+                ⚠️ Configure sua chave Pix antes de gerar o QR Code
+              </Text>
+            </Box>
+          )}
+        </Box>
       </Box>
-    </Box>
+    </SafeAreaView>
   );
 }

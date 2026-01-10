@@ -24,10 +24,11 @@ import {
   FormControlHelper,
   FormControlHelperText,
 } from "@gluestack-ui/themed";
-import { Save, ArrowLeft } from "lucide-react-native";
+import { Save, ArrowLeft, Home } from "lucide-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { isValidPixKey } from "../utils/pixGenerator";
 import { PixIcon } from "../icons/PixIcon";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface PixKey {
   id: string;
@@ -44,6 +45,7 @@ export default function ConfigScreen({ navigation, route }: any) {
   const [errors, setErrors] = useState({ pixKey: "", name: "", city: "" });
   const [isEditing, setIsEditing] = useState(false);
   const [editKeyId, setEditKeyId] = useState<string | null>(null);
+  const [hasKeys, setHasKeys] = useState(false);
 
   useEffect(() => {
     loadConfig();
@@ -51,6 +53,11 @@ export default function ConfigScreen({ navigation, route }: any) {
 
   const loadConfig = async () => {
     try {
+      // Verificar se tem chaves cadastradas
+      const keysData = await AsyncStorage.getItem("pixKeys");
+      const keys: PixKey[] = keysData ? JSON.parse(keysData) : [];
+      setHasKeys(keys.length > 0);
+
       const editId = route?.params?.editKeyId;
 
       if (editId) {
@@ -58,15 +65,11 @@ export default function ConfigScreen({ navigation, route }: any) {
         setIsEditing(true);
         setEditKeyId(editId);
 
-        const keysData = await AsyncStorage.getItem("pixKeys");
-        if (keysData) {
-          const keys: PixKey[] = JSON.parse(keysData);
-          const keyToEdit = keys.find((k) => k.id === editId);
-          if (keyToEdit) {
-            setPixKey(keyToEdit.pixKey);
-            setName(keyToEdit.merchantName);
-            setCity(keyToEdit.merchantCity);
-          }
+        const keyToEdit = keys.find((k) => k.id === editId);
+        if (keyToEdit) {
+          setPixKey(keyToEdit.pixKey);
+          setName(keyToEdit.merchantName);
+          setCity(keyToEdit.merchantCity);
         }
       }
     } catch (error) {
@@ -166,143 +169,164 @@ export default function ConfigScreen({ navigation, route }: any) {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: "#F0F9FF" }}
+      edges={["top", "bottom"]}
     >
-      <ScrollView style={{ flex: 1, backgroundColor: "#F0F9FF" }}>
-        <Box px="$6" pt="$12" pb="$8">
-          {/* Back Button */}
-          <Pressable
-            onPress={() => navigation.goBack()}
-            style={{
-              position: "absolute",
-              top: 48,
-              left: 24,
-              zIndex: 10,
-              padding: 8,
-            }}
-          >
-            <ArrowLeft color="#3B82F6" size={24} />
-          </Pressable>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
+        <ScrollView style={{ flex: 1, backgroundColor: "#F0F9FF" }}>
+          <Box px="$6" pt="$3" pb="$8">
+            {/* Back Button */}
+            <Pressable
+              onPress={() => navigation.goBack()}
+              style={{
+                position: "absolute",
+                top: 12,
+                left: 24,
+                zIndex: 10,
+                padding: 8,
+              }}
+            >
+              <ArrowLeft color="#3B82F6" size={24} />
+            </Pressable>
+            {/* Home Button */}
+            {hasKeys && (
+              <Pressable
+                onPress={() => navigation.navigate("Home")}
+                style={{
+                  position: "absolute",
+                  top: 12,
+                  right: 24,
+                  zIndex: 10,
+                  padding: 8,
+                  backgroundColor: "#32BCAD",
+                  borderRadius: 20,
+                }}
+              >
+                <Home color="#FFFFFF" size={24} />
+              </Pressable>
+            )}
+            {/* Header */}
+            <VStack space="lg" alignItems="center" mb="$8">
+              <Box bg="#32BCAD" rounded="$full" p="$4" mb="$2">
+                <PixIcon width={32} height={32} />
+              </Box>
+              <Text size="3xl" bold color="$gray800">
+                {isEditing ? "Editar Chave Pix" : "Nova Chave Pix"}
+              </Text>
+              <Text size="md" color="$gray600" textAlign="center">
+                {isEditing
+                  ? "Atualize os dados da sua chave Pix"
+                  : "Adicione uma nova chave para receber pagamentos"}
+              </Text>
+            </VStack>
 
-          {/* Header */}
-          <VStack space="lg" alignItems="center" mb="$8">
-            <Box bg="#32BCAD" rounded="$full" p="$4" mb="$2">
-              <PixIcon width={32} height={32} />
+            {/* Form */}
+            <VStack space="xl">
+              <FormControl isInvalid={!!errors.pixKey}>
+                <FormControlLabel>
+                  <FormControlLabelText>Chave Pix</FormControlLabelText>
+                </FormControlLabel>
+                <Input variant="outline" size="lg">
+                  <InputField
+                    placeholder="CPF, Email, Telefone ou Chave Aleatória"
+                    value={pixKey}
+                    onChangeText={(text) => {
+                      setPixKey(text);
+                      if (errors.pixKey) setErrors({ ...errors, pixKey: "" });
+                    }}
+                  />
+                </Input>
+                {errors.pixKey ? (
+                  <FormControlError>
+                    <FormControlErrorText>{errors.pixKey}</FormControlErrorText>
+                  </FormControlError>
+                ) : (
+                  <FormControlHelper>
+                    <FormControlHelperText size="xs">
+                      Ex: 000.000.000-00, email@example.com, +5511999999999
+                    </FormControlHelperText>
+                  </FormControlHelper>
+                )}
+              </FormControl>
+
+              <FormControl isInvalid={!!errors.name}>
+                <FormControlLabel>
+                  <FormControlLabelText>Nome Completo</FormControlLabelText>
+                </FormControlLabel>
+                <Input variant="outline" size="lg">
+                  <InputField
+                    placeholder="Seu nome ou nome da empresa"
+                    value={name}
+                    maxLength={25}
+                    onChangeText={(text) => {
+                      setName(text);
+                      if (errors.name) setErrors({ ...errors, name: "" });
+                    }}
+                  />
+                </Input>
+                {errors.name && (
+                  <FormControlError>
+                    <FormControlErrorText>{errors.name}</FormControlErrorText>
+                  </FormControlError>
+                )}
+              </FormControl>
+
+              <FormControl isInvalid={!!errors.city}>
+                <FormControlLabel>
+                  <FormControlLabelText>Cidade</FormControlLabelText>
+                </FormControlLabel>
+                <Input variant="outline" size="lg">
+                  <InputField
+                    placeholder="Sua cidade"
+                    value={city}
+                    maxLength={15}
+                    onChangeText={(text) => {
+                      setCity(text);
+                      if (errors.city) setErrors({ ...errors, city: "" });
+                    }}
+                  />
+                </Input>
+                {errors.city && (
+                  <FormControlError>
+                    <FormControlErrorText>{errors.city}</FormControlErrorText>
+                  </FormControlError>
+                )}
+              </FormControl>
+            </VStack>
+
+            {/* Save Button */}
+            <Button size="lg" onPress={handleSave} mt="$8">
+              <ButtonIcon as={Save} mr="$2" />
+              <ButtonText>
+                {isEditing ? "Atualizar Chave" : "Adicionar Chave"}
+              </ButtonText>
+            </Button>
+
+            {/* Info Card */}
+            <Box
+              mt="$8"
+              bg="$blue50"
+              rounded="$xl"
+              p="$4"
+              borderColor="$blue200"
+              borderWidth={1}
+            >
+              <Text size="md" bold color="$blue800" mb="$2">
+                ℹ️ Informações Importantes
+              </Text>
+              <Text size="sm" color="$blue700" lineHeight="$sm">
+                • Seus dados são salvos apenas no seu dispositivo{"\n"}• A chave
+                Pix deve estar ativa na sua conta{"\n"}• O nome será exibido
+                para quem efetuar o pagamento
+              </Text>
             </Box>
-            <Text size="3xl" bold color="$gray800">
-              {isEditing ? "Editar Chave Pix" : "Nova Chave Pix"}
-            </Text>
-            <Text size="md" color="$gray600" textAlign="center">
-              {isEditing
-                ? "Atualize os dados da sua chave Pix"
-                : "Adicione uma nova chave para receber pagamentos"}
-            </Text>
-          </VStack>
-
-          {/* Form */}
-          <VStack space="xl">
-            <FormControl isInvalid={!!errors.pixKey}>
-              <FormControlLabel>
-                <FormControlLabelText>Chave Pix</FormControlLabelText>
-              </FormControlLabel>
-              <Input variant="outline" size="lg">
-                <InputField
-                  placeholder="CPF, Email, Telefone ou Chave Aleatória"
-                  value={pixKey}
-                  onChangeText={(text) => {
-                    setPixKey(text);
-                    if (errors.pixKey) setErrors({ ...errors, pixKey: "" });
-                  }}
-                />
-              </Input>
-              {errors.pixKey ? (
-                <FormControlError>
-                  <FormControlErrorText>{errors.pixKey}</FormControlErrorText>
-                </FormControlError>
-              ) : (
-                <FormControlHelper>
-                  <FormControlHelperText size="xs">
-                    Ex: 000.000.000-00, email@example.com, +5511999999999
-                  </FormControlHelperText>
-                </FormControlHelper>
-              )}
-            </FormControl>
-
-            <FormControl isInvalid={!!errors.name}>
-              <FormControlLabel>
-                <FormControlLabelText>Nome Completo</FormControlLabelText>
-              </FormControlLabel>
-              <Input variant="outline" size="lg">
-                <InputField
-                  placeholder="Seu nome ou nome da empresa"
-                  value={name}
-                  maxLength={25}
-                  onChangeText={(text) => {
-                    setName(text);
-                    if (errors.name) setErrors({ ...errors, name: "" });
-                  }}
-                />
-              </Input>
-              {errors.name && (
-                <FormControlError>
-                  <FormControlErrorText>{errors.name}</FormControlErrorText>
-                </FormControlError>
-              )}
-            </FormControl>
-
-            <FormControl isInvalid={!!errors.city}>
-              <FormControlLabel>
-                <FormControlLabelText>Cidade</FormControlLabelText>
-              </FormControlLabel>
-              <Input variant="outline" size="lg">
-                <InputField
-                  placeholder="Sua cidade"
-                  value={city}
-                  maxLength={15}
-                  onChangeText={(text) => {
-                    setCity(text);
-                    if (errors.city) setErrors({ ...errors, city: "" });
-                  }}
-                />
-              </Input>
-              {errors.city && (
-                <FormControlError>
-                  <FormControlErrorText>{errors.city}</FormControlErrorText>
-                </FormControlError>
-              )}
-            </FormControl>
-          </VStack>
-
-          {/* Save Button */}
-          <Button size="lg" onPress={handleSave} mt="$8">
-            <ButtonIcon as={Save} mr="$2" />
-            <ButtonText>
-              {isEditing ? "Atualizar Chave" : "Adicionar Chave"}
-            </ButtonText>
-          </Button>
-
-          {/* Info Card */}
-          <Box
-            mt="$8"
-            bg="$blue50"
-            rounded="$xl"
-            p="$4"
-            borderColor="$blue200"
-            borderWidth={1}
-          >
-            <Text size="md" bold color="$blue800" mb="$2">
-              ℹ️ Informações Importantes
-            </Text>
-            <Text size="sm" color="$blue700" lineHeight="$sm">
-              • Seus dados são salvos apenas no seu dispositivo{"\n"}• A chave
-              Pix deve estar ativa na sua conta{"\n"}• O nome será exibido para
-              quem efetuar o pagamento
-            </Text>
           </Box>
-        </Box>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
