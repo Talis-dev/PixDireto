@@ -19,7 +19,7 @@
     },
     "production": {
       "android": {
-        "buildType": "apk"
+        "buildType": "aab"
       },
       "env": {
         "NODE_OPTIONS": "--max-old-space-size=4096"
