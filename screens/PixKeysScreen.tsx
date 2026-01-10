@@ -534,10 +534,22 @@ export default function PixKeysScreen({ navigation }: any) {
             <Button
               onPress={() => navigation.navigate("Config")}
               size="lg"
-              mb="$8"
+              mb="$4"
             >
               <ButtonIcon as={Plus} mr="$2" />
               <ButtonText>Adicionar Nova Chave Pix</ButtonText>
+            </Button>
+
+            {/* About Button - Discreto */}
+            <Button
+              onPress={() => navigation.navigate("About")}
+              size="sm"
+              variant="link"
+              mb="$8"
+            >
+              <ButtonText size="xs" color="$coolGray500">
+                Sobre • Política de Privacidade
+              </ButtonText>
             </Button>
           </Box>
         </ScrollView>

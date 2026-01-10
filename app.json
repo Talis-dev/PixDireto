@@ -41,6 +41,7 @@
       }
     },
     "privacy": "public",
-    "primaryColor": "#32BCAD"
+    "primaryColor": "#32BCAD",
+    "privacyPolicyUrl": "https://pix-direto.vercel.app/"
   }
 }
