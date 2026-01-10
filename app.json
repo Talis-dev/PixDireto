@@ -7,13 +7,15 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "description": "Gere QR Codes Pix instantaneamente! Aceite pagamentos de forma rápida e profissional. Gerencie múltiplas chaves, exporte em PDF e receba pagamentos offline.",
     "splash": {
       "image": "./assets/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#06153e"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.talisdev.pixdireto"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,7 +23,14 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.talisdev.pixdireto"
+      "package": "com.talisdev.pixdireto",
+      "versionCode": 1,
+      "permissions": [
+        "INTERNET",
+        "WRITE_EXTERNAL_STORAGE",
+        "READ_EXTERNAL_STORAGE"
+      ],
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.talisdev.pixdireto"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -30,6 +39,8 @@
       "eas": {
         "projectId": "d9f8d5ed-4225-4a86-a397-7150743ca1aa"
       }
-    }
+    },
+    "privacy": "public",
+    "primaryColor": "#32BCAD"
   }
 }

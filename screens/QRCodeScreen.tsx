@@ -91,11 +91,10 @@ export default function QRCodeScreen({ route, navigation }: any) {
       // Ler o ícone do app como base64
       const iconAsset = Asset.fromModule(require("../assets/icon.png"));
       await iconAsset.downloadAsync();
+      // @ts-ignore - FileSystem tipos não são detectados corretamente
       const iconBase64 = await FileSystem.readAsStringAsync(
         iconAsset.localUri!,
-        {
-          encoding: "base64",
-        }
+        { encoding: "base64" }
       );
 
       // Obter QR Code como base64

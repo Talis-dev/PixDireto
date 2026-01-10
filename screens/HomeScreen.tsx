@@ -145,7 +145,7 @@ export default function HomeScreen({ navigation, route }: any) {
           pb={isSmallScreen ? "$2" : "$3"}
         >
           <HStack justifyContent="space-between" alignItems="center">
-            <HStack flex={1} alignItems="top" space="sm">
+            <HStack flex={1}  space="sm">
               <Image
                 source={require("../assets/PixDiretoLogo.png")}
                 style={{
