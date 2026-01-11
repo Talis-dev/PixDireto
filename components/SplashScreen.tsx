@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { View, Image, StyleSheet } from "react-native";
+import { Image, Text, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import packageJson from "../package.json";
 
 export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
   useEffect(() => {
@@ -23,6 +24,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
         style={styles.logo}
         resizeMode="contain"
       />
+      <Text style={styles.version}>v{packageJson.version}</Text>
     </LinearGradient>
   );
 }
@@ -36,5 +38,11 @@ const styles = StyleSheet.create({
   logo: {
     width: 200,
     height: 200,
-  },
+},
+version: {
+  color: "#ffffff",
+  fontSize: 14,
+  marginTop: 20,
+  opacity: 0.7,
+},
 });

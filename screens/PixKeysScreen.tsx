@@ -26,8 +26,7 @@ import QRCode from "react-native-qrcode-svg";
 import { generatePixCode } from "../utils/pixGenerator";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
-import * as FileSystem from "expo-file-system/legacy";
-import { Asset } from "expo-asset";
+import { APP_ICON_BASE64 } from "../utils/iconBase64";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const { height } = Dimensions.get("window");
@@ -166,15 +165,6 @@ export default function PixKeysScreen({ navigation }: any) {
         merchantCity: key.merchantCity,
       });
 
-      // Ler o ícone do app como base64
-      const iconAsset = Asset.fromModule(require("../assets/icon.png"));
-      await iconAsset.downloadAsync();
-      // @ts-ignore - FileSystem tipos não são detectados corretamente
-      const iconBase64 = await FileSystem.readAsStringAsync(
-        iconAsset.localUri!,
-        { encoding: "base64" }
-      );
-
       // Obter QR Code como base64
       qrCodeRef.toDataURL(async (dataURL: string) => {
         const html = `
@@ -291,7 +281,7 @@ export default function PixKeysScreen({ navigation }: any) {
                 </div>
                 
                 <div class="footer">
-                  <img class="app-icon" src="data:image/png;base64,${iconBase64}" alt="Pix Direto" />
+                  <img class="app-icon" src="data:image/png;base64,${APP_ICON_BASE64}" alt="Pix Direto" />
                   <div class="footer-text">
                     <span class="app-name">Pix Direto</span><br/>
                     Baixe o app na Play Store ou Apple gratuitamente
@@ -302,18 +292,24 @@ export default function PixKeysScreen({ navigation }: any) {
           </html>
         `;
 
-        const { uri } = await Print.printToFileAsync({ html });
-        await Sharing.shareAsync(uri, {
-          mimeType: "application/pdf",
-          dialogTitle: "Salvar QR Code Pix",
-          UTI: "com.adobe.pdf",
+        const { uri } = await Print.printToFileAsync({
+          html,
+          base64: false,
         });
 
-        Alert.alert("Sucesso", "QR Code salvo em PDF!");
+        if (!uri) {
+          throw new Error("Não foi possível gerar o PDF");
+        }
+
+        await Sharing.shareAsync(uri, {
+          mimeType: "application/pdf",
+          dialogTitle: "Salvar ou Compartilhar QR Code Pix",
+          UTI: "com.adobe.pdf",
+        });
       });
     } catch (error) {
       console.error("Erro ao gerar PDF:", error);
-      Alert.alert("Erro", "Não foi possível gerar o PDF.");
+      Alert.alert("Erro", "Não foi possível gerar o PDF. Tente novamente.");
     }
   };
 

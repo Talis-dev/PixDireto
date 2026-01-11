@@ -12,6 +12,7 @@ import {
 } from "@gluestack-ui/themed";
 import { ArrowLeft, ExternalLink, Shield, Heart } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import packageJson from "../package.json";
 
 export default function AboutScreen({ navigation }: any) {
   const openPrivacyPolicy = () => {
@@ -58,7 +59,7 @@ export default function AboutScreen({ navigation }: any) {
                   PixDireto
                 </Text>
                 <Text size="sm" color="$coolGray600">
-                  Versão 1.0.0
+                  Versão {packageJson.version}
                 </Text>
               </VStack>
             </Card>
@@ -193,8 +194,8 @@ export default function AboutScreen({ navigation }: any) {
                 lineHeight="$sm"
               >
                 Este aplicativo não tem vínculo com o Banco Central do Brasil ou
-                instituições financeiras. QR Codes gerados seguem o padrão EMV do
-                Pix.
+                instituições financeiras. QR Codes gerados seguem o padrão EMV
+                do Pix.
               </Text>
             </Box>
           </Box>

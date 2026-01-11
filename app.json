@@ -27,8 +27,8 @@
       "versionCode": 1,
       "permissions": [
         "INTERNET",
-        "WRITE_EXTERNAL_STORAGE",
-        "READ_EXTERNAL_STORAGE"
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
       ],
       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.talisdev.pixdireto"
     },
