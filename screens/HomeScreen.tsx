@@ -15,6 +15,7 @@ import {
   Settings,
   Key,
   ShoppingCart,
+  Clock,
 } from "lucide-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { PixIcon } from "../icons/PixIcon";
@@ -145,7 +146,7 @@ export default function HomeScreen({ navigation, route }: any) {
           pb={isSmallScreen ? "$2" : "$3"}
         >
           <HStack justifyContent="space-between" alignItems="center">
-            <HStack flex={1}  space="sm">
+            <HStack flex={1} space="sm">
               <Image
                 source={require("../assets/PixDiretoLogo.png")}
                 style={{
@@ -207,10 +208,10 @@ export default function HomeScreen({ navigation, route }: any) {
 
         {/* Amount Display */}
         <Box px="$4" py={isSmallScreen ? "$3" : "$6"} alignItems="center">
-          <Text size="xs" color="$gray500" mb="$1">
+          <Text size="md" color="$gray500" mb="$1">
             Valor do Pix
           </Text>
-          <Text size={isSmallScreen ? "3xl" : "4xl"} bold color="$blue600">
+          <Text size={isSmallScreen ? "5xl" : "6xl"} bold color="$blue600">
             {formatCurrency(amount)}
           </Text>
         </Box>
@@ -222,6 +223,25 @@ export default function HomeScreen({ navigation, route }: any) {
           pb={isSmallScreen ? "$4" : "$6"}
           justifyContent="flex-end"
         >
+          {/* History Button - Above Keypad */}
+          <Pressable
+            onPress={() => navigation.navigate("History")}
+            style={{
+              backgroundColor: "#a6a8ff",
+              borderRadius: 12,
+              padding: 12,
+              marginBottom: isSmallScreen ? 8 : 12,
+              alignSelf: "flex-start",
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 1 },
+              shadowOpacity: 0.1,
+              shadowRadius: 2,
+              elevation: 2,
+            }}
+          >
+            <Clock color="#FFFFFF" size={24} />
+          </Pressable>
+
           <VStack space={isSmallScreen ? "xs" : "sm"}>
             {/* Row 1 */}
             <HStack space={isSmallScreen ? "xs" : "sm"}>
@@ -273,35 +293,38 @@ export default function HomeScreen({ navigation, route }: any) {
                 <Delete color="#EF4444" size={isSmallScreen ? 22 : 26} />
               </Pressable>
             </HStack>
-          </VStack>
 
-          {/* Generate QR Code Button */}
-          <Button
-            onPress={handleGenerateQRCode}
-            size={isSmallScreen ? "md" : "lg"}
-            mt={isSmallScreen ? "$3" : "$4"}
-            mb="$2"
-            isDisabled={amount === "0"}
-          >
-            <ButtonIcon as={QrCode} mr="$2" />
-            <ButtonText>Gerar QR Code</ButtonText>
-          </Button>
-
-          {!hasConfig && (
-            <Box
-              mt="$3"
-              mb="$2"
-              bg="$yellow50"
-              rounded="$xl"
-              p="$3"
-              borderColor="$yellow200"
-              borderWidth={1}
+            {/* Row 5 - Generate QR Code Button (Green) */}
+            <Pressable
+              onPress={handleGenerateQRCode}
+              disabled={amount === "0"}
+              style={{
+                backgroundColor: amount === "0" ? "#D1D5DB" : "#10B981",
+                borderRadius: 12,
+                minHeight: isSmallScreen ? 56 : 64,
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "row",
+                gap: 8,
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.15,
+                shadowRadius: 3,
+                elevation: 3,
+              }}
             >
-              <Text size="xs" color="$yellow800" textAlign="center">
-                ⚠️ Configure sua chave Pix antes de gerar o QR Code
+              <QrCode color="#FFFFFF" size={isSmallScreen ? 26 : 32} />
+              <Text
+                size={isSmallScreen ? "md" : "lg"}
+                bold
+                color="#FFFFFF"
+                mt="$1"
+                textAlign="center"
+              >
+                Gerar QR Code
               </Text>
-            </Box>
-          )}
+            </Pressable>
+          </VStack>
         </Box>
       </Box>
     </SafeAreaView>

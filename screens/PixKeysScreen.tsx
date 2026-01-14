@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { ScrollView, Alert, Pressable, Dimensions } from "react-native";
+import { ScrollView, Alert, Pressable, Dimensions, Image } from "react-native";
+import { BankImage } from "../components/BankImage";
 import {
   Box,
   VStack,
@@ -22,6 +23,7 @@ import {
 } from "lucide-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { isValidPixKey } from "../utils/pixGenerator";
+import { BANKS } from "../utils/banks";
 import QRCode from "react-native-qrcode-svg";
 import { generatePixCode } from "../utils/pixGenerator";
 import * as Print from "expo-print";
@@ -36,6 +38,7 @@ interface PixKey {
   pixKey: string;
   merchantName: string;
   merchantCity: string;
+  bankId?: string;
   isActive: boolean;
 }
 
@@ -386,21 +389,40 @@ export default function PixKeysScreen({ navigation }: any) {
                 }}
               >
                 <VStack px="$4">
-                  <HStack alignItems="center" mb="$2">
+                  <HStack alignItems="center" mb="$1">
                     <Check color="#3B82F6" size={20} />
                     <Text size="sm" bold color="$blue700" ml="$2">
                       CHAVE ATIVA
                     </Text>
                   </HStack>
-                  <Text size="lg" bold color="$gray800" mb="$1">
-                    {activeKey.merchantName}
-                  </Text>
-                  <Text size="sm" color="$gray600" mb="$1">
+                  <HStack alignItems="center" space="md">
+                    {activeKey.bankId &&
+                      BANKS.find((b) => b.id === activeKey.bankId) && (
+                        <BankImage
+                          bankId={activeKey.bankId}
+                          source={
+                            BANKS.find((b) => b.id === activeKey.bankId)?.logo
+                          }
+                          width={60}
+                          height={60}
+                          resizeMode="contain"
+                        />
+                      )}
+                    <VStack flex={1}>
+                      <Text size="md" bold color="$gray800" mb="$1">
+                        {activeKey.merchantName}
+                      </Text>
+                  <Text size="sm" color="$gray600">
                     {activeKey.pixKey}
                   </Text>
-                  <Text size="xs" color="$gray500">
-                    📍 {activeKey.merchantCity}
-                  </Text>
+                      {activeKey.bankId &&
+                        BANKS.find((b) => b.id === activeKey.bankId) && (
+                          <Text size="sm" color="$gray600" mb="$1">
+                            {BANKS.find((b) => b.id === activeKey.bankId)?.name}
+                          </Text>
+                        )}
+                    </VStack>
+                  </HStack>
                 </VStack>
               </Card>
             )}
@@ -437,17 +459,37 @@ export default function PixKeysScreen({ navigation }: any) {
                         alignItems="flex-start"
                         mb="$2"
                       >
-                        <VStack flex={1}>
-                          <Text size="md" bold color="$gray800">
-                            {key.merchantName}
-                          </Text>
-                          <Text size="sm" color="$gray600" mt="$1">
-                            {key.pixKey}
-                          </Text>
-                          <Text size="xs" color="$gray500" mt="$1">
-                            📍 {key.merchantCity}
-                          </Text>
-                        </VStack>
+                        <HStack flex={1} space="md" alignItems="flex-start">
+                          {key.bankId &&
+                            BANKS.find((b) => b.id === key.bankId) && (
+                              <BankImage
+                                bankId={key.bankId}
+                                source={
+                                  BANKS.find((b) => b.id === key.bankId)?.logo
+                                }
+                                width={50}
+                                height={50}
+                                resizeMode="contain"
+                              />
+                            )}
+                          <VStack flex={1}>
+                            <Text size="md" bold color="$gray800">
+                              {key.merchantName}
+                            </Text>
+                            {key.bankId &&
+                              BANKS.find((b) => b.id === key.bankId) && (
+                                <Text size="xs" color="$gray500" mt="$1">
+                                  {BANKS.find((b) => b.id === key.bankId)?.name}
+                                </Text>
+                              )}
+                            <Text size="sm" color="$gray600" mt="$1">
+                              {key.pixKey}
+                            </Text>
+                            <Text size="xs" color="$gray500" mt="$1">
+                              📍 {key.merchantCity}
+                            </Text>
+                          </VStack>
+                        </HStack>
                         {key.isActive && (
                           <Box bg="$blue100" rounded="$full" px="$3" py="$1">
                             <Text size="xs" bold color="$blue700">

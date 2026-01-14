@@ -15,6 +15,7 @@ import QRCodeScreen from "./screens/QRCodeScreen";
 import PixKeysScreen from "./screens/PixKeysScreen";
 import ProductsScreen from "./screens/ProductsScreen";
 import AboutScreen from "./screens/AboutScreen";
+import HistoryScreen from "./screens/HistoryScreen";
 import SplashScreen from "./components/SplashScreen";
 
 const Stack = createNativeStackNavigator();
@@ -68,6 +69,7 @@ export default function App() {
               <Stack.Screen name="PixKeys" component={PixKeysScreen} />
               <Stack.Screen name="Products" component={ProductsScreen} />
               <Stack.Screen name="About" component={AboutScreen} />
+              <Stack.Screen name="History" component={HistoryScreen} />
             </Stack.Navigator>
           </NavigationContainer>
           <StatusBar style="dark" />

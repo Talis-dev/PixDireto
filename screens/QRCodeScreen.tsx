@@ -74,9 +74,39 @@ export default function QRCodeScreen({ route, navigation }: any) {
       });
 
       setPixCode(code);
+
+      // Adicionar ao histórico
+      await addToHistory(code, pixKey, name, city);
     } catch (error) {
       console.error("Erro ao gerar código Pix:", error);
       Alert.alert("Erro", "Não foi possível gerar o código Pix.");
+    }
+  };
+
+  const addToHistory = async (
+    pixCode: string,
+    pixKey: string,
+    merchantName: string,
+    merchantCity: string
+  ) => {
+    try {
+      const historyData = await AsyncStorage.getItem("pixHistory");
+      const history = historyData ? JSON.parse(historyData) : [];
+
+      const newEntry = {
+        id: Date.now().toString(),
+        pixKey,
+        merchantName,
+        pixCode,
+        amount: amount && amount > 0 ? amount : undefined,
+        createdAt: new Date().toISOString(),
+        isDonation,
+      };
+
+      history.push(newEntry);
+      await AsyncStorage.setItem("pixHistory", JSON.stringify(history));
+    } catch (error) {
+      console.error("Erro ao salvar no histórico:", error);
     }
   };
 
