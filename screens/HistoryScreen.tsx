@@ -15,6 +15,7 @@ import { ArrowLeft, Trash2, Copy, FileDown } from "lucide-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Clipboard from "expo-clipboard";
 import * as Print from "expo-print";
+import * as Sharing from "expo-sharing";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 interface PixHistory {
@@ -117,6 +118,14 @@ export default function HistoryScreen({ navigation }: any) {
       style: "currency",
       currency: "BRL",
     });
+  };
+
+  const escapeHtml = (text: string): string => {
+    return String(text)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
   };
 
   const handleExportPDF = async () => {
@@ -271,7 +280,7 @@ export default function HistoryScreen({ navigation }: any) {
         htmlContent += `
                   <tr>
                     <td>${formattedDate}</td>
-                    <td>${item.merchantName}</td>
+                    <td>${escapeHtml(item.merchantName)}</td>
                     <td>${formattedAmount}</td>
                     <td>${
                       item.isDonation
@@ -308,13 +317,20 @@ export default function HistoryScreen({ navigation }: any) {
         new Date().toISOString().split("T")[0]
       }.pdf`;
 
-      await Print.printAsync({
+      const { uri } = await Print.printToFileAsync({
         html: htmlContent,
-        fileName: filename,
-        printerUrl: undefined,
+        base64: false,
       });
 
-      Alert.alert("Sucesso", "Histórico exportado com sucesso!");
+      if (!uri) {
+        throw new Error("Não foi possível gerar o arquivo PDF");
+      }
+
+      await Sharing.shareAsync(uri, {
+        mimeType: "application/pdf",
+        dialogTitle: "Salvar ou Compartilhar Histórico PIX",
+        UTI: "com.adobe.pdf",
+      });
     } catch (error) {
       console.error("Erro ao exportar PDF:", error);
       Alert.alert("Erro", "Não foi possível exportar o histórico.");

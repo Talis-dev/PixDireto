@@ -32,7 +32,11 @@ import {
 } from "@gluestack-ui/themed";
 import { Save, ArrowLeft, Home, ChevronDown } from "lucide-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { isValidPixKey } from "../utils/pixGenerator";
+import {
+  isValidPixKey,
+  getPixKeyErrorMessage,
+  normalizePixKey,
+} from "../utils/pixGenerator";
 import { BANKS, Bank } from "../utils/banks";
 import { PixIcon } from "../icons/PixIcon";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -124,7 +128,7 @@ export default function ConfigScreen({ navigation, route }: any) {
       newErrors.pixKey = "Chave Pix é obrigatória";
       isValid = false;
     } else if (!isValidPixKey(pixKey)) {
-      newErrors.pixKey = "Chave Pix inválida";
+      newErrors.pixKey = getPixKeyErrorMessage(pixKey);
       isValid = false;
     }
 
@@ -161,7 +165,7 @@ export default function ConfigScreen({ navigation, route }: any) {
           key.id === editKeyId
             ? {
                 ...key,
-                pixKey: pixKey.trim(),
+                pixKey: normalizePixKey(pixKey.trim()),
                 merchantName: name.trim(),
                 merchantCity: city.trim(),
                 bankId: selectedBank?.id,
@@ -172,7 +176,7 @@ export default function ConfigScreen({ navigation, route }: any) {
         // Atualizar valores antigos se for a chave ativa
         const editedKey = keys.find((k) => k.id === editKeyId);
         if (editedKey?.isActive) {
-          await AsyncStorage.setItem("pixKey", pixKey.trim());
+          await AsyncStorage.setItem("pixKey", normalizePixKey(pixKey.trim()));
           await AsyncStorage.setItem("merchantName", name.trim());
           await AsyncStorage.setItem("merchantCity", city.trim());
           if (selectedBank) {
@@ -185,7 +189,7 @@ export default function ConfigScreen({ navigation, route }: any) {
         // Adicionar nova chave
         const newKey: PixKey = {
           id: Date.now().toString(),
-          pixKey: pixKey.trim(),
+          pixKey: normalizePixKey(pixKey.trim()),
           merchantName: name.trim(),
           merchantCity: city.trim(),
           bankId: selectedBank?.id,
@@ -350,7 +354,7 @@ export default function ConfigScreen({ navigation, route }: any) {
                 ) : (
                   <FormControlHelper>
                     <FormControlHelperText size="xs">
-                      Ex: 000.000.000-00, email@example.com, +5511999999999
+                      Ex: CPF (123.456.789-09), CNPJ, e-mail, telefone (+5511999999999)
                     </FormControlHelperText>
                   </FormControlHelper>
                 )}

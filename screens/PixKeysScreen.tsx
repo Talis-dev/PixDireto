@@ -280,7 +280,7 @@ export default function PixKeysScreen({ navigation }: any) {
                 </div>
                 
                 <div class="merchant-info">
-                  <div class="merchant-name">${key.merchantName}</div>
+                  <div class="merchant-name">${key.merchantName.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")}</div>
                 </div>
                 
                 <div class="footer">
@@ -552,15 +552,26 @@ export default function PixKeysScreen({ navigation }: any) {
 
                       {/* QR Code invisível para gerar PDF */}
                       <Box style={{ height: 0, overflow: "hidden" }}>
-                        <QRCode
-                          value={generatePixCode({
-                            pixKey: key.pixKey,
-                            merchantName: key.merchantName,
-                            merchantCity: key.merchantCity,
-                          })}
-                          size={300}
-                          getRef={(ref) => (qrCodeRefs.current[key.id] = ref)}
-                        />
+                        {(() => {
+                          try {
+                            const pixCode = generatePixCode({
+                              pixKey: key.pixKey,
+                              merchantName: key.merchantName,
+                              merchantCity: key.merchantCity,
+                            });
+                            return (
+                              <QRCode
+                                value={pixCode}
+                                size={300}
+                                getRef={(ref) =>
+                                  (qrCodeRefs.current[key.id] = ref)
+                                }
+                              />
+                            );
+                          } catch {
+                            return null;
+                          }
+                        })()}
                       </Box>
                     </VStack>
                   </Card>
